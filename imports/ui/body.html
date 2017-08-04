@@ -1,0 +1,167 @@
+<body></body>
+
+<template name="ApplicationLayout">
+    {{> yield "helper"}}
+    {{> yield "navbar"}}
+    {{> yield "profile"}}
+    {{> yield "main"}}
+</template>
+
+<template name="welcome">
+    <div class="container">
+        <div class="jumbotron">
+            <h1 style="margin: 0 auto; width: 200px; text-align: center;">Hello!</h1>
+            <div style="margin: 0 auto; padding-top: 30px; width: 177px;"><button class="btn btn-success btn-lg">{{> loginButtons}}</button></div>
+            <div style="margin: 0 auto; padding-top: 15px; width: 200px; text-align: center;">- or -</div>
+            <div style="margin: 0 auto; padding-top: 15px; width: 96px;"><a href="/explore" class="btn btn-info btn-lg">Explore</a></div>
+        </div>
+    </div>
+</template>
+
+<template name="image">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xs-1 col-md-1">
+                <a href="#"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
+            </div>
+            <div class="col-xs-10 col-md-10">
+                <a href="/explore"><img class="single-image" src="{{img_src}}"></a>
+                <div class="top-left">
+                    <a href="#"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a>
+                </div>
+                <div class="top-right">
+                    <a href="#"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></a>
+                </div>
+                <div class="bottom-left">
+                    <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+                </div>
+                <div class="bottom-right">
+                    <a href="#"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></a>
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-1">
+                <a href="#"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-2">
+                <h3>{{getUser createdBy}}</h3>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h1>{{img_title}}</h1>
+                <p>{{img_alt}}</p>
+                <p>Created by: {{img_copy}}</p>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <h3>Tags</h3>
+                <p>{{#each tags _id}}
+                    <a href="/tags/{{_id}}">{{tag_name}}</a><br>
+                {{/each}}</p>
+                <h3>Galleries</h3>
+                <p>{{#each galleries _id}}
+                    <a href="/users/{{createdBy}}/galleries/{{gallerie_name}}">{{gallerie_name}}</a><br>
+                {{/each}}</p>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<template name="navbar">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/explore">Image Share</a>
+            <ul class="nav navbar-nav">
+                <li><a href="/galleries">Galleries</a></li>
+                <li><a href="/tags">Tags</a></li>
+                <li><a href="/users">Users</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {{#if currentUser}}
+                <li><button class="btn btn-success navbar-btn btn-sm js-show-image-form">add image</button></li>
+                {{/if}}
+                <li><p class="navbar-text">{{> loginButtons align="right"}}</p></li>
+            </ul>
+        </div>
+    </nav>
+</template>
+
+<template name="image_add_form">
+    <div class="modal fade" id="image_add_form">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form class="js-add-image">
+                        Image: <input type="text" name="img_src">
+                        Name: <input type="text" name="img_title"><br>
+                        Description: <input type="text" name="img_alt">
+                        Copyright: <input type="text" name="img_copy"><br>
+                        Tags: <input type="text" name="tags">
+                        Galleries: <input type="text" name="galleries">
+                        <button type="submit" class="btn btn-success">upload</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" data-dismiss="modal">cansel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="images">
+    <div class="container">
+    
+    <h2>
+        {{#if filtering_images}}
+        Showing images by {{getFilterUser}}. <a class="js-unset-image-filter" href="#">Show all images</a>
+        {{/if}}
+    </h2>
+
+    <ul style="margin-bottom: 30px" class="nav nav-pills">
+        <li role="presentation" class="{{#unless setPopular}}active {{/unless}}js-unset-popular"><a href="#">Newest</a></li>
+        <li role="presentation" class="{{#if setPopular}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
+        <li role="presentation" class="{{#if setOneCol}}active {{/if}}pull-right js-one-col"><a href="#"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></a></li>
+        <li role="presentation" class="{{#unless setOneCol}}active {{/unless}}pull-right js-three-col"><a href="#"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></a></li>
+    </ul>
+    
+    <div class="row">
+    {{#each images}}
+    <div class="col-xs-12{{#unless setOneCol}} col-md-4{{/unless}}{{#if setOneCol}} col-md-12{{/if}}" id="{{_id}}">
+        <div class="thumbnail">
+            <a href="/image/{{_id}}"><img class="js-image" src="{{img_src}}" alt="{{img_alt}}"></a>
+            <div class="top-left">
+                <h3>{{img_title}}</h3>
+            </div>
+            <div class="top-right">
+                {{#if canEdit}}
+                <p class="checkbox">
+                    <label>
+                        <input type="checkbox" class="js-select-image"> Select
+                    </label>
+                </p>
+                {{/if}}
+            </div>
+            <div class="bottom-left">
+                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+            </div>
+            <div class="bottom-right">
+                <p>Uploaded by: <a href="#" class="js-set-image-filter">{{getUser createdBy}}</a><br>
+                Created by: {{img_copy}}</p>
+                {{#if canEdit}}
+                <button class="js-del-image btn btn-danger">delete</button>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    </div>
+
+    </div>
+</template>

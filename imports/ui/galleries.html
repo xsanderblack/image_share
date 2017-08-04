@@ -1,0 +1,188 @@
+<template name="galleries">
+    <div class="container">
+
+    <ul style="margin-bottom: 30px" class="nav nav-pills">
+        <li role="presentation" class="{{#unless setPopularGal}}active {{/unless}}js-unset-popular"><a href="#">Newest</a></li>
+        <li role="presentation" class="{{#if setPopularGal}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
+    </ul>
+    
+    <div class="row">
+    {{#each galleries}}
+    <div class="col-xs-12 col-md-4" id="{{_id}}">
+        <div class="thumbnail">
+            <a href="/users/{{createdBy}}/galleries/{{gallerie_name}}"><img class="js-image" src="{{getImage images_id.[0]}}" alt="{{gallerie_name}}"></a>
+            <div class="top-left">
+                <h3>{{gallerie_name}} by <a href="/users/{{createdBy}}">{{getUser createdBy}}</a></h3>
+            </div>
+            <!-- <div class="bottom-left">
+                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+            </div> -->
+        </div>
+    </div>
+    {{/each}}
+    </div>
+
+    </div>
+</template>
+
+<template name="gallerie">
+    <div class="container">
+
+    <h1>{{gallerie_name}}</h1>
+
+    <ul style="margin-bottom: 30px" class="nav nav-pills">
+        <li role="presentation" class="{{#unless setPopularGalOne}}active {{/unless}}js-unset-popular"><a href="#">Newest</a></li>
+        <li role="presentation" class="{{#if setPopularGalOne}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
+        <li role="presentation" class="{{#if setOneColGalOne}}active {{/if}}pull-right js-one-col"><a href="#"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></a></li>
+        <li role="presentation" class="{{#unless setOneColGalOne}}active {{/unless}}pull-right js-three-col"><a href="#"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></a></li>
+    </ul>
+    
+    <div class="row">
+    {{#each images images_id}}
+    <div class="col-xs-12{{#unless setOneColGalOne}} col-md-4{{/unless}}{{#if setOneColGalOne}} col-md-12{{/if}}" id="{{_id}}">
+        <div class="thumbnail">
+            <a href="/image/{{_id}}"><img class="js-image" src="{{img_src}}" alt="{{img_alt}}"></a>
+            <div class="top-left">
+                <h3>{{img_title}}</h3>
+            </div>
+            <div class="top-right">
+                {{#if canEdit}}
+                <p class="checkbox">
+                    <label>
+                        <input type="checkbox" class="js-select-image"> Select
+                    </label>
+                </p>
+                {{/if}}
+            </div>
+            <div class="bottom-left">
+                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+            </div>
+            <div class="bottom-right">
+                <p>Uploaded by: <a href="#" class="js-set-image-filter">{{getUser createdBy}}</a><br>
+                Created by: {{img_copy}}</p>
+                {{#if canEdit}}
+                <button class="js-del-image btn btn-danger">delete</button>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    </div>
+
+    </div>
+</template>
+
+<template name="users">
+    <div class="container">
+
+    <div class="row">
+    {{#each users}}
+    <div class="col-xs-12 col-md-3" id="{{_id}}">
+        <div class="thumbnail">
+            <a href="/users/{{_id}}/photos">{{username}}</a>
+        </div>
+    </div>
+    {{/each}}
+    </div>
+
+    </div>
+</template>
+
+<template name="user_top">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <h1>{{username}}</h1>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <p>{{photos_count _id}} photos</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <ul class="nav nav-tabs nav-justified">
+                    <li role="presentation" class="{{#if setPhotos}}active{{/if}}"><a href="/users/{{_id}}/photos">Photos</a></li>
+                    <li role="presentation" class="{{#if setGalleries}}active{{/if}}"><a href="/users/{{_id}}/galleries">Galleries</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="photos_by_user">
+    <div class="container">
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+        <ul style="margin-bottom: 30px" class="nav nav-pills">
+            <li role="presentation" class="{{#if userPhotoNew}}active {{/if}}js-set-new"><a href="#">Newest</a></li>
+            <li role="presentation" class="{{#if userPhotoPopular}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
+            {{#if canEditUser _id}}
+            <li role="presentation" class="{{#if userPhotoPrivate}}active {{/if}}js-set-private"><a href="#">Private</a></li>
+            {{/if}}
+            <li role="presentation" class="{{#if setOneCol}}active {{/if}}pull-right js-one-col"><a href="#"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></a></li>
+            <li role="presentation" class="{{#unless setOneCol}}active {{/unless}}pull-right js-three-col"><a href="#"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></a></li>
+        </ul>
+        </div>
+    </div>
+    
+    <div class="row">
+    {{#each images _id}}
+    <div class="col-xs-12{{#unless setOneCol}} col-md-4{{/unless}}{{#if setOneCol}} col-md-12{{/if}}" id="{{_id}}">
+        <div class="thumbnail">
+            <a href="/image/{{_id}}"><img class="js-image" src="{{img_src}}" alt="{{img_alt}}"></a>
+            <div class="top-left">
+                <h3>{{img_title}}</h3>
+            </div>
+            <div class="top-right">
+                {{#if canEdit}}
+                <p class="checkbox">
+                    <label>
+                        <input type="checkbox" class="js-select-image"> Select
+                    </label>
+                </p>
+                {{/if}}
+            </div>
+            <div class="bottom-left">
+                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+            </div>
+            <div class="bottom-right">
+                <p>Created by: {{img_copy}}</p>
+                {{#if canEdit}}
+                <button class="js-del-image btn btn-danger">delete</button>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    </div>
+
+    </div>
+</template>
+
+<template name="galleries_by_user">
+    <div class="container">
+
+    <ul style="margin-bottom: 30px" class="nav nav-pills">
+        <li role="presentation" class="{{#unless setPopularGal}}active {{/unless}}js-unset-popular"><a href="#">Newest</a></li>
+        <li role="presentation" class="{{#if setPopularGal}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
+    </ul>
+    
+    <div class="row">
+    {{#each galleries _id}}
+    <div class="col-xs-12 col-md-4" id="{{_id}}">
+        <div class="thumbnail">
+            <a href="/users/{{createdBy}}/galleries/{{gallerie_name}}"><img class="js-image" src="{{getImage images_id.[0]}}" alt="{{gallerie_name}}"></a>
+            <div class="top-left">
+                <h3>{{gallerie_name}}</h3>
+            </div>
+            <!-- <div class="bottom-left">
+                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+            </div> -->
+        </div>
+    </div>
+    {{/each}}
+    </div>
+
+    </div>
+</template>

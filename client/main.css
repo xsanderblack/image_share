@@ -1,0 +1,52 @@
+body {
+    padding-top: 60px;
+}
+
+.single-image {
+    max-width: 100%;
+}
+
+.selected-image {
+    box-shadow: 0 0 30px #66b3ff;
+}
+
+.thumbnail {
+    position: relative;
+}
+
+.js-image {
+    width: 100%;
+    height: auto;
+    /*position: absolute;
+    z-index: -1;
+    clip: rect(0px,283px,188px,0px);*/
+}
+
+.top-left {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    color: white;
+}
+
+.top-right {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    color: white;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+    color: white;
+}
+
+.bottom-right {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+    color: white;
+}
+

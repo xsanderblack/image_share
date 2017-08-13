@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { Images } from '../api/collections.js';
+import { Images, ImagesIndex } from '../api/collections.js';
 import { Tags } from '../api/tags.js';
 import { Galleries } from '../api/galleries.js';
 
@@ -120,7 +120,12 @@ Template.navbar.helpers({
         } else {
             return false;
         }
-    }
+    },
+    imagesIndex: () => ImagesIndex,
+});
+
+Template.searchBox.helpers({
+    imagesIndex: () => ImagesIndex,
 });
 
 Template.navbar.events({

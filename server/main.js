@@ -13,7 +13,14 @@ Meteor.startup(() => {
         for (var i=1; i<23; i++) {
             Images.insert({
                 img_src: "img_" + i + ".jpg",
-                img_alt: "Image " + i
+                img_title: "Image " + i,
+                img_alt: "Description for image " + i,
+                img_copy: "Creater of image" + i,
+                createdOn: new Date(),
+                createdBy: "id", // !!!
+                tags: ["tag"],
+                galleries: ["gallerie"],
+                isSelected: false,
             });
         }
     }

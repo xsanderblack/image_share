@@ -22,7 +22,6 @@ Meteor.methods({
             img_title: data.img_title,
             img_alt: data.img_alt,
             img_copy: data.img_copy,
-            rating: 1,
             createdOn: new Date(),
             createdBy: Meteor.user()._id,
             tags: data.tags,

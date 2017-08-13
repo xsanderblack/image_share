@@ -1,7 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import { Index, MinimongoEngine } from 'meteor/easy:search';
 
 export const Images = new Mongo.Collection("images");
+
+// Index for images search
+export const ImagesIndex = new Index({
+    collection: Images,
+    fields: [ 'img_title' ],
+    engine: new MinimongoEngine(),
+});
 
 if (Meteor.isServer) {
   Meteor.publish("images", function() {

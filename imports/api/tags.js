@@ -1,7 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import { Index, MinimongoEngine } from 'meteor/easy:search';
 
 export const Tags = new Mongo.Collection("tags");
+
+// Index for tags search
+export const TagsIndex = new Index({
+    collection: Tags,
+    fields: [ 'tag_name' ],
+    engine: new MinimongoEngine(),
+});
 
 if (Meteor.isServer) {
   Meteor.publish("tags", function() {

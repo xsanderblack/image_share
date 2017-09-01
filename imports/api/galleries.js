@@ -1,7 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import { Index, MinimongoEngine } from 'meteor/easy:search';
 
 export const Galleries = new Mongo.Collection("galleries");
+
+// Index for galleries search
+export const GalleriesIndex = new Index({
+    collection: Galleries,
+    fields: [ 'gallerie_name' ],
+    engine: new MinimongoEngine(),
+});
 
 if (Meteor.isServer) {
   Meteor.publish("galleries", function() {

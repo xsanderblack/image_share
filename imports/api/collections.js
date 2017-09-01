@@ -7,7 +7,7 @@ export const Images = new Mongo.Collection("images");
 // Index for images search
 export const ImagesIndex = new Index({
     collection: Images,
-    fields: [ 'img_title' ],
+    fields: [ 'img_title', 'img_alt' ],
     engine: new MinimongoEngine(),
 });
 

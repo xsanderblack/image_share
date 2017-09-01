@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import { Images, ImagesIndex } from '../api/collections.js';
-import { Tags } from '../api/tags.js';
-import { Galleries } from '../api/galleries.js';
+import { Tags, TagsIndex } from '../api/tags.js';
+import { Galleries, GalleriesIndex } from '../api/galleries.js';
 
 import './body.html';
 import './tags.js';
@@ -120,18 +120,61 @@ Template.navbar.helpers({
         } else {
             return false;
         }
-    },
-    imagesIndex: () => ImagesIndex,
+    }
 });
 
-Template.searchBox.helpers({
+Template.search.helpers({
     imagesIndex: () => ImagesIndex,
+    inputAttributes: function () {
+		return { 'autofocus': '', 'placeholder': 'Start searching...' };
+    },
+    getUser: function(user_id) {
+        var user = Meteor.users.findOne({_id: user_id});
+        if (user) {
+            return user.username;
+        } else {
+            return "anon";
+        }
+    },
+    canEdit: function() {
+        if (this.createdBy === Meteor.userId()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+});
+
+Template.search_tags.helpers({
+    tagsIndex: () => TagsIndex,
+    inputAttributes: function () {
+		return { 'autofocus': '', 'placeholder': 'Start searching...' };
+    },
+    getImage: function(image_id) {
+        let image = Images.findOne({_id: image_id});
+        if (image) return image.img_src;
+    }
+});
+
+Template.search_galleries.helpers({
+    galleriesIndex: () => GalleriesIndex,
+    inputAttributes: function () {
+		return { 'autofocus': '', 'placeholder': 'Start searching...' };
+    },
+    getUser: function(user_id) {
+        let user = Meteor.users.findOne({_id: user_id});
+        if (user) return user.username;
+    },
+    getImage: function(image_id) {
+        let image = Images.findOne({_id: image_id});
+        if (image) return image.img_src;
+    }
 });
 
 Template.navbar.events({
     "click .js-show-image-form": function(event) {
         $("#image_add_form").modal("show");
-    },
+    }
 });
 
 Template.images.events({

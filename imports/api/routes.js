@@ -166,7 +166,7 @@ Router.route("/users", function () {
 //     });
 // });
 
-Router.route("/search/:request", function () {
+Router.route("/search", function () {
     this.render("image_add_form", {
         to: "helper"
     });
@@ -174,21 +174,30 @@ Router.route("/search/:request", function () {
         to: "navbar"
     });
     this.render("search", {
-        to: "main",
-        data: function() {
-            let arr = this.params.request.split("&");
-            let str = arr.join(" ");
-            Images.createIndex(
-                {
-                    img_title: "text",
-                    img_alt: "text",
-                    tags: "text",
-                    galleries: "text",
-                }
-            );
-            let result = Images.find( { $text: { $search: str } } );
-            Images.dropIndex( "text" );
-            return result;
-        }
+        to: "main"
+    });
+});
+
+Router.route("/search_tags", function () {
+    this.render("image_add_form", {
+        to: "helper"
+    });
+    this.render("navbar", {
+        to: "navbar"
+    });
+    this.render("search_tags", {
+        to: "main"
+    });
+});
+
+Router.route("/search_galleries", function () {
+    this.render("image_add_form", {
+        to: "helper"
+    });
+    this.render("navbar", {
+        to: "navbar"
+    });
+    this.render("search_galleries", {
+        to: "main"
     });
 });

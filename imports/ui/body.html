@@ -79,7 +79,7 @@
                 <li><a href="/users">Users</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><p class="navbar-text">{{> EasySearch.Input index=imagesIndex }}</p></li>
+                <li><p class="navbar-text"><a href="/search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></p></li>
                 {{#if currentUser}}
                 <li><button class="btn btn-success navbar-btn btn-sm js-show-image-form">add image</button></li>
                 {{/if}}
@@ -89,12 +89,134 @@
     </nav>
 </template>
 
-<template name="searchBox">
-    <ul>
-        {{#EasySearch.Each index=imagesIndex }}
-            <li>Title of the image: {{img_title}}</li>
-        {{/EasySearch.Each}}
-    </ul>
+<template name="search">
+    {{> EasySearch.Input index=imagesIndex attributes=inputAttributes }}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="btn-group" role="group" aria-label="search">
+                    <button type="button" class="btn btn-default active">Images</button>
+                    <a href="/search_tags"><button type="button" class="btn btn-default">Tags</button></a>
+                    <a href="/search_galleries"><button type="button" class="btn btn-default">Galleries</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#EasySearch.IfInputEmpty index=imagesIndex }}
+        <div>...for example "Madagascar"</div>
+    {{else}}
+        {{#EasySearch.IfNoResults index=imagesIndex }}
+            <div>No results found</div>
+        {{/EasySearch.IfNoResults}}
+        <ul>
+            {{#EasySearch.Each index=imagesIndex }}
+                <div class="col-xs-12 col-md-4" id="{{_id}}">
+                    <div class="thumbnail">
+                        <a href="/image/{{_id}}"><img class="js-image" src="{{img_src}}" alt="{{img_alt}}"></a>
+                        <div class="top-left">
+                            <h3>{{img_title}}</h3>
+                        </div>
+                        <div class="top-right">
+                            {{#if canEdit}}
+                            <p class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="js-select-image"> Select
+                                </label>
+                            </p>
+                            {{/if}}
+                        </div>
+                        <div class="bottom-left">
+                            <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+                        </div>
+                        <div class="bottom-right">
+                            <p>Uploaded by: <a href="#" class="js-set-image-filter">{{getUser createdBy}}</a><br>
+                            Created by: {{img_copy}}</p>
+                            {{#if canEdit}}
+                            <button class="js-del-image btn btn-danger">delete</button>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            {{/EasySearch.Each}}
+        </ul>
+    {{/EasySearch.IfInputEmpty}}
+</template>
+
+<template name="search_tags">
+    {{> EasySearch.Input index=tagsIndex attributes=inputAttributes }}
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="btn-group" role="group" aria-label="search">
+                    <a href="/search"><button type="button" class="btn btn-default">Images</button></a>
+                    <button type="button" class="btn btn-default active">Tags</button>
+                    <a href="/search_galleries"><button type="button" class="btn btn-default">Galleries</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {{#EasySearch.IfInputEmpty index=tagsIndex }}
+        <div>...for example "Madagascar"</div>
+    {{else}}
+        {{#EasySearch.IfNoResults index=tagsIndex }}
+            <div>No results found</div>
+        {{/EasySearch.IfNoResults}}
+        <ul>
+            {{#EasySearch.Each index=tagsIndex }}
+                <div class="col-xs-12 col-md-4" id="{{_id}}">
+                    <div class="thumbnail">
+                        <a href="/tags/{{_id}}"><img class="js-image" src="{{getImage images_id.[0]}}" alt="{{tag_name}}"></a>
+                        <div class="top-left">
+                            <h3>{{tag_name}}</h3>
+                        </div>
+                    </div>
+                </div>
+            {{/EasySearch.Each}}
+        </ul>
+    {{/EasySearch.IfInputEmpty}}
+</template>
+
+<template name="search_galleries">
+    {{> EasySearch.Input index=galleriesIndex attributes=inputAttributes }}
+        
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="btn-group" role="group" aria-label="search">
+                    <a href="/search"><button type="button" class="btn btn-default">Images</button></a>
+                    <a href="/search_tags"><button type="button" class="btn btn-default">Tags</button></a>
+                    <button type="button" class="btn btn-default active">Galleries</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    {{#EasySearch.IfInputEmpty index=galleriesIndex }}
+        <div>...for example "Madagascar"</div>
+    {{else}}
+        {{#EasySearch.IfNoResults index=galleriesIndex }}
+            <div>No results found</div>
+        {{/EasySearch.IfNoResults}}
+        <ul>
+            {{#EasySearch.Each index=galleriesIndex }}
+                <div class="col-xs-12 col-md-4" id="{{_id}}">
+                    <div class="thumbnail">
+                        <a href="/users/{{createdBy}}/galleries/{{gallerie_name}}"><img class="js-image" src="{{getImage images_id.[0]}}" alt="{{gallerie_name}}"></a>
+                        <div class="top-left">
+                            <h3>{{gallerie_name}} by <a href="/users/{{createdBy}}">{{getUser createdBy}}</a></h3>
+                        </div>
+                        <!-- <div class="bottom-left">
+                            <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+                        </div> -->
+                    </div>
+                </div>
+            {{/EasySearch.Each}}
+        </ul>
+    {{/EasySearch.IfInputEmpty}}
 </template>
 
 <template name="image_add_form">
@@ -126,8 +248,6 @@
 
 <template name="images">
     <div class="container">
-
-    {{> searchBox}}
     
     <h2>
         {{#if filtering_images}}

@@ -23,6 +23,9 @@ Router.route("/explore", function () {
     this.render("images", {
         to: "main"
     });
+    this.render("footer", {
+        to: "footer"
+    });
 });
 
 Router.route("/image/:_id", function () {
@@ -38,6 +41,9 @@ Router.route("/image/:_id", function () {
             return Images.findOne({ _id: this.params._id });
         }
     });
+    this.render("footer", {
+        to: "footer"
+    });
 });
 
 Router.route("/tags", function () {
@@ -49,6 +55,9 @@ Router.route("/tags", function () {
     });
     this.render("tags", {
         to: "main"
+    });
+    this.render("footer", {
+        to: "footer"
     });
 });
 
@@ -65,6 +74,9 @@ Router.route("/tags/:_id", function () {
             return Tags.findOne({ _id: this.params._id });
         }
     });
+    this.render("footer", {
+        to: "footer"
+    });
 });
 
 Router.route("/galleries", function () {
@@ -76,6 +88,9 @@ Router.route("/galleries", function () {
     });
     this.render("galleries", {
         to: "main"
+    });
+    this.render("footer", {
+        to: "footer"
     });
 });
 
@@ -98,6 +113,9 @@ Router.route("/users/:user_id/galleries", function () {
             return Meteor.users.findOne({ _id: this.params.user_id });
         }
     });
+    this.render("footer", {
+        to: "footer"
+    });
 });
 
 Router.route("/users/:user_id/photos", function () {
@@ -119,6 +137,9 @@ Router.route("/users/:user_id/photos", function () {
             return Meteor.users.findOne({ _id: this.params.user_id });
         }
     });
+    this.render("footer", {
+        to: "footer"
+    });
 });
 
 Router.route("/users/:user_id/galleries/:gallerie_name", function () {
@@ -137,6 +158,9 @@ Router.route("/users/:user_id/galleries/:gallerie_name", function () {
             });
         }
     });
+    this.render("footer", {
+        to: "footer"
+    });
 });
 
 Router.route("/users", function () {
@@ -148,6 +172,9 @@ Router.route("/users", function () {
     });
     this.render("users", {
         to: "main"
+    });
+    this.render("footer", {
+        to: "footer"
     });
 });
 
@@ -176,6 +203,9 @@ Router.route("/search", function () {
     this.render("search", {
         to: "main"
     });
+    this.render("footer", {
+        to: "footer"
+    });
 });
 
 Router.route("/search_tags", function () {
@@ -188,6 +218,9 @@ Router.route("/search_tags", function () {
     this.render("search_tags", {
         to: "main"
     });
+    this.render("footer", {
+        to: "footer"
+    });
 });
 
 Router.route("/search_galleries", function () {
@@ -199,5 +232,8 @@ Router.route("/search_galleries", function () {
     });
     this.render("search_galleries", {
         to: "main"
+    });
+    this.render("footer", {
+        to: "footer"
     });
 });

@@ -5,56 +5,42 @@
     {{> yield "navbar"}}
     {{> yield "profile"}}
     {{> yield "main"}}
+    {{> yield "footer"}}
 </template>
 
 <template name="welcome">
+    <video id="bgvid" playsinline autoplay muted loop>
+        <source src="ShimmeringParticles_MotionArray.mp4" type="video/mp4">
+    </video>
     <div class="container">
         <div class="jumbotron">
             <h1 style="margin: 0 auto; width: 200px; text-align: center;">Hello!</h1>
-            <div style="margin: 0 auto; padding-top: 30px; width: 177px;"><button class="btn btn-success btn-lg">{{> loginButtons}}</button></div>
-            <div style="margin: 0 auto; padding-top: 15px; width: 200px; text-align: center;">- or -</div>
+            <div style="margin: 0 auto; padding-top: 30px; width: 156px;"><button class="btn btn-success btn-lg">{{> loginButtons}}</button></div>
             <div style="margin: 0 auto; padding-top: 15px; width: 96px;"><a href="/explore" class="btn btn-info btn-lg">Explore</a></div>
         </div>
     </div>
 </template>
 
 <template name="image">
-    <div class="container">
+    <div class="single-img-container">
+        <div class="single-img-shadow"></div>
+        <img class="single-img" src="{{img_src}}">
+        <div class="nav-previous"><a href="{{prev_image _id}}"></a></div>
+        <div class="nav-next"><a href="{{next_image _id}}"></a></div>
+    </div>
 
-        <div class="row">
-            <div class="col-xs-1 col-md-1">
-                <a href="#"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
-            </div>
-            <div class="col-xs-10 col-md-10">
-                <a href="/explore"><img class="single-image" src="{{img_src}}"></a>
-                <div class="top-left">
-                    <a href="#"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a>
-                </div>
-                <div class="top-right">
-                    <a href="#"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></a>
-                </div>
-                <div class="bottom-left">
-                    <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
-                </div>
-                <div class="bottom-right">
-                    <a href="#"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></a>
-                </div>
-            </div>
-            <div class="col-xs-1 col-md-1">
-                <a href="#"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
-            </div>
-        </div>
-
+    <div class="container img-description-container">
         <div class="row">
             <div class="col-xs-12 col-md-2">
-                <h3>{{getUser createdBy}}</h3>
+                <h3><a href="/users/{{createdBy}}/photos">{{getUser createdBy}}</a></h3>
             </div>
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-8 img-description">
                 <h1>{{img_title}}</h1>
+                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
                 <p>{{img_alt}}</p>
                 <p>Created by: {{img_copy}}</p>
             </div>
-            <div class="col-xs-12 col-md-4">
+            <div class="col-xs-12 col-md-2">
                 <h3>Tags</h3>
                 <p>{{#each tags _id}}
                     <a href="/tags/{{_id}}">{{tag_name}}</a><br>
@@ -65,157 +51,157 @@
                 {{/each}}</p>
             </div>
         </div>
-
     </div>
 </template>
 
 <template name="navbar">
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/explore">Image Share</a>
-            <ul class="nav navbar-nav">
-                <li><a href="/galleries">Galleries</a></li>
-                <li><a href="/tags">Tags</a></li>
-                <li><a href="/users">Users</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><p class="navbar-text"><a href="/search"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></p></li>
-                {{#if currentUser}}
-                <li><button class="btn btn-success navbar-btn btn-sm js-show-image-form">add image</button></li>
-                {{/if}}
-                <li><p class="navbar-text">{{> loginButtons align="right"}}</p></li>
-            </ul>
-        </div>
-    </nav>
+    <header id="header">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <h1><a class="navbar-brand" href="/explore">Image Share</a></h1>
+                <ul class="nav navbar-nav">
+                    <li><a href="/explore">Explore</a></li>
+                    <li><a href="/tags">Tags</a></li>
+                    <li><a href="/galleries">Galleries</a></li>
+                    <li><a href="/users">Users</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><p class="navbar-text"><a href="/search" class="magnifying-glass">Search</a></p></li>
+                    {{#if currentUser}}
+                    <li><button class="btn btn-success navbar-btn btn-sm js-show-image-form">add image</button></li>
+                    {{/if}}
+                    <li><p class="navbar-text">{{> loginButtons align="right"}}</p></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 </template>
 
 <template name="search">
-    {{> EasySearch.Input index=imagesIndex attributes=inputAttributes }}
+    <div class="search-bar-container">{{> EasySearch.Input index=imagesIndex attributes=inputAttributes }}</div>
 
     <div class="container">
-        <div class="row">
+        <div class="row user-top-line">
             <div class="col-xs-12 col-md-12">
-                <div class="btn-group" role="group" aria-label="search">
-                    <button type="button" class="btn btn-default active">Images</button>
-                    <a href="/search_tags"><button type="button" class="btn btn-default">Tags</button></a>
-                    <a href="/search_galleries"><button type="button" class="btn btn-default">Galleries</button></a>
-                </div>
+                <ul class="nav nav-tabs nav-justified">
+                    <li role="presentation" class="active"><a href="/search">Images</a></li>
+                    <li role="presentation"><a href="/search_tags">Tags</a></li>
+                    <li role="presentation"><a href="/search_galleries">Galleries</a></li>
+                </ul>
             </div>
         </div>
     </div>
 
     {{#EasySearch.IfInputEmpty index=imagesIndex }}
-        <div>...for example "Madagascar"</div>
+        <div class="container search-text"><p>...for example "Madagascar"</p></div>
     {{else}}
         {{#EasySearch.IfNoResults index=imagesIndex }}
-            <div>No results found</div>
+            <div class="container search-text"><p>No results found</p></div>
         {{/EasySearch.IfNoResults}}
-        <ul>
-            {{#EasySearch.Each index=imagesIndex }}
-                <div class="col-xs-12 col-md-4" id="{{_id}}">
-                    <div class="thumbnail">
-                        <a href="/image/{{_id}}"><img class="js-image" src="{{img_src}}" alt="{{img_alt}}"></a>
-                        <div class="top-left">
-                            <h3>{{img_title}}</h3>
-                        </div>
-                        <div class="top-right">
-                            {{#if canEdit}}
-                            <p class="checkbox">
-                                <label>
-                                    <input type="checkbox" class="js-select-image"> Select
-                                </label>
-                            </p>
-                            {{/if}}
-                        </div>
-                        <div class="bottom-left">
-                            <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
-                        </div>
-                        <div class="bottom-right">
-                            <p>Uploaded by: <a href="#" class="js-set-image-filter">{{getUser createdBy}}</a><br>
-                            Created by: {{img_copy}}</p>
-                            {{#if canEdit}}
-                            <button class="js-del-image btn btn-danger">delete</button>
-                            {{/if}}
+        <div class="container">
+            <div class="row">
+                {{#EasySearch.Each index=imagesIndex }}
+                    <div class="col-xs-12 col-md-4" id="{{_id}}">
+                        <div class="thumbnail">
+                            <img class="js-image {{aspect_ratio}}" src="{{img_src}}" alt="{{img_alt}}">
+                            <div class="shadow-top"></div>
+                            <div class="shadow-bottom"></div>
+                            <div class="img-link"><a href="/image/{{_id}}"></a></div>
+                            <div class="top-left">
+                                <h3>{{img_title}}</h3>
+                            </div>
+                            <div class="bottom-left">
+                                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+                            </div>
+                            <div class="bottom-right">
+                                <p>Uploaded by: <a href="#" class="js-set-image-filter">{{getUser createdBy}}</a><br>
+                                Created by: {{img_copy}}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {{/EasySearch.Each}}
-        </ul>
+                {{/EasySearch.Each}}
+            </div>
+        </div>
     {{/EasySearch.IfInputEmpty}}
 </template>
 
 <template name="search_tags">
-    {{> EasySearch.Input index=tagsIndex attributes=inputAttributes }}
+    <div class="search-bar-container">{{> EasySearch.Input index=tagsIndex attributes=inputAttributes }}</div>
     
     <div class="container">
-        <div class="row">
+        <div class="row user-top-line">
             <div class="col-xs-12 col-md-12">
-                <div class="btn-group" role="group" aria-label="search">
-                    <a href="/search"><button type="button" class="btn btn-default">Images</button></a>
-                    <button type="button" class="btn btn-default active">Tags</button>
-                    <a href="/search_galleries"><button type="button" class="btn btn-default">Galleries</button></a>
-                </div>
+                <ul class="nav nav-tabs nav-justified">
+                    <li role="presentation"><a href="/search">Images</a></li>
+                    <li role="presentation" class="active"><a href="/search_tags">Tags</a></li>
+                    <li role="presentation"><a href="/search_galleries">Galleries</a></li>
+                </ul>
             </div>
         </div>
     </div>
     
     {{#EasySearch.IfInputEmpty index=tagsIndex }}
-        <div>...for example "Madagascar"</div>
+        <div class="container search-text"><p>...for example "Madagascar"</p></div>
     {{else}}
         {{#EasySearch.IfNoResults index=tagsIndex }}
-            <div>No results found</div>
+            <div class="container search-text"><p>No results found</p></div>
         {{/EasySearch.IfNoResults}}
-        <ul>
-            {{#EasySearch.Each index=tagsIndex }}
-                <div class="col-xs-12 col-md-4" id="{{_id}}">
-                    <div class="thumbnail">
-                        <a href="/tags/{{_id}}"><img class="js-image" src="{{getImage images_id.[0]}}" alt="{{tag_name}}"></a>
-                        <div class="top-left">
-                            <h3>{{tag_name}}</h3>
+        <div class="container">
+            <div class="row">
+                {{#EasySearch.Each index=tagsIndex }}
+                    <div class="col-xs-12 col-md-4" id="{{_id}}">
+                        <div class="thumbnail tag-thumbnail">
+                            <img class="js-image" src="{{getImage images_id.[0]}}" alt="{{tag_name}}">
+                            <div class="shadow"></div>
+                            <div class="center">
+                                <h3>{{tag_name}}</h3>
+                            </div>
+                            <div class="img-link"><a href="/tags/{{_id}}"></a></div>
                         </div>
                     </div>
-                </div>
-            {{/EasySearch.Each}}
-        </ul>
+                {{/EasySearch.Each}}
+            </div>
+        </div>
     {{/EasySearch.IfInputEmpty}}
 </template>
 
 <template name="search_galleries">
-    {{> EasySearch.Input index=galleriesIndex attributes=inputAttributes }}
+    <div class="search-bar-container">{{> EasySearch.Input index=galleriesIndex attributes=inputAttributes }}</div>
         
     <div class="container">
-        <div class="row">
+        <div class="row user-top-line">
             <div class="col-xs-12 col-md-12">
-                <div class="btn-group" role="group" aria-label="search">
-                    <a href="/search"><button type="button" class="btn btn-default">Images</button></a>
-                    <a href="/search_tags"><button type="button" class="btn btn-default">Tags</button></a>
-                    <button type="button" class="btn btn-default active">Galleries</button>
-                </div>
+                <ul class="nav nav-tabs nav-justified">
+                    <li role="presentation"><a href="/search">Images</a></li>
+                    <li role="presentation"><a href="/search_tags">Tags</a></li>
+                    <li role="presentation" class="active"><a href="/search_galleries">Galleries</a></li>
+                </ul>
             </div>
         </div>
     </div>
         
     {{#EasySearch.IfInputEmpty index=galleriesIndex }}
-        <div>...for example "Madagascar"</div>
+        <div class="container search-text"><p>...for example "Madagascar"</p></div>
     {{else}}
         {{#EasySearch.IfNoResults index=galleriesIndex }}
-            <div>No results found</div>
+            <div class="container search-text"><p>No results found</p></div>
         {{/EasySearch.IfNoResults}}
-        <ul>
-            {{#EasySearch.Each index=galleriesIndex }}
-                <div class="col-xs-12 col-md-4" id="{{_id}}">
-                    <div class="thumbnail">
-                        <a href="/users/{{createdBy}}/galleries/{{gallerie_name}}"><img class="js-image" src="{{getImage images_id.[0]}}" alt="{{gallerie_name}}"></a>
-                        <div class="top-left">
-                            <h3>{{gallerie_name}} by <a href="/users/{{createdBy}}">{{getUser createdBy}}</a></h3>
+        <div class="container">
+            <div class="row">
+                {{#EasySearch.Each index=galleriesIndex }}
+                    <div class="col-xs-12 col-md-4" id="{{_id}}">
+                        <div class="thumbnail gal-thumbnail">
+                            <img class="js-image" src="{{getImage images_id.[0]}}" alt="{{gallerie_name}}">
+                            <div class="shadow"></div>
+                            <div class="center">
+                                <h3>{{gallerie_name}}<!-- by <a href="/users/{{createdBy}}">{{getUser createdBy}}</a>--></h3>
+                            </div>
+                            <div class="img-link"><a href="/users/{{createdBy}}/galleries/{{gallerie_name}}"></a></div>
                         </div>
-                        <!-- <div class="bottom-left">
-                            <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
-                        </div> -->
                     </div>
-                </div>
-            {{/EasySearch.Each}}
-        </ul>
+                {{/EasySearch.Each}}
+            </div>
+        </div>
     {{/EasySearch.IfInputEmpty}}
 </template>
 
@@ -224,21 +210,26 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="modal-title">
-                    </div>
+                    <div class="modal-title"><p>Upload image</p></div>
                 </div>
                 <div class="modal-body">
-                    <form class="js-add-image">
-                        Image: <input type="text" name="img_src">
-                        Name: <input type="text" name="img_title"><br>
-                        Description: <input type="text" name="img_alt">
-                        Copyright: <input type="text" name="img_copy"><br>
-                        Tags: <input type="text" name="tags">
-                        Galleries: <input type="text" name="galleries">
-                        <button type="submit" class="btn btn-success">upload</button>
+                    <form class="js-add-image" id="add-image">
+                        <p class="upload-description">Image link:</p>
+                        <p class="upload-input"><input type="text" name="img_src" size="35" required></p>
+                        <p class="upload-description">Name:</p>
+                        <p class="upload-input"><input type="text" name="img_title" size="35" required></p>
+                        <p class="upload-description">Description:</p>
+                        <p class="upload-input"><textarea name="img_alt" rows="10" cols="35" required></textarea></p>
+                        <p class="upload-description">Author:</p>
+                        <p class="upload-input"><input type="text" name="img_copy" size="35" required></p>
+                        <p class="upload-description">Tags:</p>
+                        <p class="upload-input"><input type="text" name="tags" size="35"></p>
+                        <p class="upload-description">Galleries:</p>
+                        <p class="upload-input"><input type="text" name="galleries" size="35"></p>
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" form="add-image">upload</button>
                     <button class="btn btn-warning" data-dismiss="modal">cansel</button>
                 </div>
             </div>
@@ -258,19 +249,22 @@
     <ul style="margin-bottom: 30px" class="nav nav-pills">
         <li role="presentation" class="{{#unless setPopular}}active {{/unless}}js-unset-popular"><a href="#">Newest</a></li>
         <li role="presentation" class="{{#if setPopular}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
-        <li role="presentation" class="{{#if setOneCol}}active {{/if}}pull-right js-one-col"><a href="#"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></a></li>
-        <li role="presentation" class="{{#unless setOneCol}}active {{/unless}}pull-right js-three-col"><a href="#"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></a></li>
+        <li role="presentation" class="{{#if setOneCol}}active {{/if}}pull-right js-one-col"><a href="#"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a></li>
+        <li role="presentation" class="{{#unless setOneCol}}active {{/unless}}pull-right js-three-col"><a href="#"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></a></li>
     </ul>
     
     <div class="row">
     {{#each images}}
-    <div class="col-xs-12{{#unless setOneCol}} col-md-4{{/unless}}{{#if setOneCol}} col-md-12{{/if}}" id="{{_id}}">
-        <div class="thumbnail">
-            <a href="/image/{{_id}}"><img class="js-image" src="{{img_src}}" alt="{{img_alt}}"></a>
+    <div class="col-xs-12{{#unless setOneCol}} col-md-4{{/unless}}{{#if setOneCol}} col-md-8 center-img{{/if}}" id="{{_id}}">
+        <div class="thumbnail {{#if setOneCol}}one-col-thumbnail{{/if}}">
+            <img class="js-image {{aspect_ratio}}" src="{{img_src}}" alt="{{img_alt}}">
+            <div class="shadow-top"></div>
+            <div class="shadow-bottom"></div>
+            <div class="img-link"><a href="/image/{{_id}}"></a></div>
             <div class="top-left">
                 <h3>{{img_title}}</h3>
             </div>
-            <div class="top-right">
+            <!-- <div class="top-right">
                 {{#if canEdit}}
                 <p class="checkbox">
                     <label>
@@ -278,16 +272,16 @@
                     </label>
                 </p>
                 {{/if}}
-            </div>
+            </div> -->
             <div class="bottom-left">
                 <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
             </div>
             <div class="bottom-right">
                 <p>Uploaded by: <a href="#" class="js-set-image-filter">{{getUser createdBy}}</a><br>
                 Created by: {{img_copy}}</p>
-                {{#if canEdit}}
+                <!-- {{#if canEdit}}
                 <button class="js-del-image btn btn-danger">delete</button>
-                {{/if}}
+                {{/if}} -->
             </div>
         </div>
     </div>
@@ -295,4 +289,12 @@
     </div>
 
     </div>
+</template>
+
+<template name="footer">
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">Created by: xsanderblack</p>
+        </div>
+    </footer>
 </template>

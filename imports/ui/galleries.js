@@ -70,8 +70,8 @@ Template.gallerie.helpers({
     setPopularGalOne: function() {
         return Session.get("setPopularGalOne") ? true : false;
     },
-    setOneColGalOne: function() {
-        return Session.get( "setOneColGalOne" ) ? true : false;
+    setOneCol: function() {
+        return Session.get( "setOneCol" ) ? true : false;
     },
     canEdit: function() {
         if (this.createdBy === Meteor.userId()) {
@@ -203,10 +203,12 @@ Template.gallerie.events({
         $("li.js-unset-popular").addClass("active");
     },
     "click .js-one-col": function(event) {
-        Session.set("setOneColGalOne", true);
+        Session.set("setOneCol", true);
+        Session.set("userSetOneCol", true);
     },
     "click .js-three-col": function(event) {
-        Session.set("setOneColGalOne", false);
+        Session.set("setOneCol", false);
+        Session.set("userSetOneCol", false);
     },
     "click .js-select-image": function(event) {
         var image_id = this._id;
@@ -251,9 +253,11 @@ Template.photos_by_user.events({
     },
     "click .js-one-col": function(event) {
         Session.set("setOneCol", true);
+        Session.set("userSetOneCol", true);
     },
     "click .js-three-col": function(event) {
         Session.set("setOneCol", false);
+        Session.set("userSetOneCol", false);
     },
     "click .js-select-image": function(event) {
         var image_id = this._id;

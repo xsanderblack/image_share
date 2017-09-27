@@ -1,19 +1,16 @@
 <template name="tags">
     <div class="container">
-
-    <ul style="margin-bottom: 30px" class="nav nav-pills">
-        <li role="presentation" class="{{#unless setPopularTag}}active {{/unless}}js-unset-popular"><a href="#">Newest</a></li>
-        <li role="presentation" class="{{#if setPopularTag}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
-    </ul>
     
     <div class="row">
     {{#each tags}}
     <div class="col-xs-12 col-md-4" id="{{_id}}">
-        <div class="thumbnail">
-            <a href="/tags/{{_id}}"><img class="js-image" src="{{getImage images_id.[0]}}" alt="{{tag_name}}"></a>
-            <div class="top-left">
+        <div class="thumbnail tag-thumbnail">
+            <img class="js-image" src="{{getImage images_id.[0]}}" alt="{{tag_name}}">
+            <div class="shadow"></div>
+            <div class="center">
                 <h3>{{tag_name}}</h3>
             </div>
+            <div class="img-link"><a href="/tags/{{_id}}"></a></div>
         </div>
     </div>
     {{/each}}
@@ -30,26 +27,20 @@
     <ul style="margin-bottom: 30px" class="nav nav-pills">
         <li role="presentation" class="{{#unless setPopularTagOne}}active {{/unless}}js-unset-popular"><a href="#">Newest</a></li>
         <li role="presentation" class="{{#if setPopularTagOne}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
-        <li role="presentation" class="{{#if setOneColTagOne}}active {{/if}}pull-right js-one-col"><a href="#"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></a></li>
-        <li role="presentation" class="{{#unless setOneColTagOne}}active {{/unless}}pull-right js-three-col"><a href="#"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></a></li>
+        <li role="presentation" class="{{#if setOneCol}}active {{/if}}pull-right js-one-col"><a href="#"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a></li>
+        <li role="presentation" class="{{#unless setOneCol}}active {{/unless}}pull-right js-three-col"><a href="#"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></a></li>
     </ul>
     
     <div class="row">
     {{#each images images_id}}
-    <div class="col-xs-12{{#unless setOneColTagOne}} col-md-4{{/unless}}{{#if setOneColTagOne}} col-md-12{{/if}}" id="{{_id}}">
-        <div class="thumbnail">
-            <a href="/image/{{_id}}"><img class="js-image" src="{{img_src}}" alt="{{img_alt}}"></a>
+    <div class="col-xs-12{{#unless setOneCol}} col-md-4{{/unless}}{{#if setOneCol}} col-md-8 center-img{{/if}}" id="{{_id}}">
+        <div class="thumbnail {{#if setOneCol}}one-col-thumbnail{{/if}}">
+            <img class="js-image {{aspect_ratio}}" src="{{img_src}}" alt="{{img_alt}}">
+            <div class="shadow-top"></div>
+            <div class="shadow-bottom"></div>
+            <div class="img-link"><a href="/image/{{_id}}"></a></div>
             <div class="top-left">
                 <h3>{{img_title}}</h3>
-            </div>
-            <div class="top-right">
-                {{#if canEdit}}
-                <p class="checkbox">
-                    <label>
-                        <input type="checkbox" class="js-select-image"> Select
-                    </label>
-                </p>
-                {{/if}}
             </div>
             <div class="bottom-left">
                 <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
@@ -57,9 +48,6 @@
             <div class="bottom-right">
                 <p>Uploaded by: <a href="#" class="js-set-image-filter">{{getUser createdBy}}</a><br>
                 Created by: {{img_copy}}</p>
-                {{#if canEdit}}
-                <button class="js-del-image btn btn-danger">delete</button>
-                {{/if}}
             </div>
         </div>
     </div>

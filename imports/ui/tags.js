@@ -76,8 +76,8 @@ Template.tag.helpers({
     setPopularTagOne: function() {
         return Session.get("setPopularTagOne") ? true : false;
     },
-    setOneColTagOne: function() {
-        return Session.get( "setOneColTagOne" ) ? true : false;
+    setOneCol: function() {
+        return Session.get( "setOneCol" ) ? true : false;
     },
     canEdit: function() {
         if (this.createdBy === Meteor.userId()) {
@@ -113,10 +113,12 @@ Template.tag.events({
         $("li.js-unset-popular").addClass("active");
     },
     "click .js-one-col": function(event) {
-        Session.set("setOneColTagOne", true);
+        Session.set("setOneCol", true);
+        Session.set("userSetOneCol", true);
     },
     "click .js-three-col": function(event) {
-        Session.set("setOneColTagOne", false);
+        Session.set("setOneCol", false);
+        Session.set("userSetOneCol", false);
     },
     "click .js-select-image": function(event) {
         var image_id = this._id;

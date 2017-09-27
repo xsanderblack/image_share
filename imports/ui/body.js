@@ -16,12 +16,33 @@ Session.set("imageLimit", 9);
 
 var lastScrollTop = 0;
 $(window).scroll(function(event) {
-    if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+    if ($(window).scrollTop() + $(window).height() > $(document).height() - 300) {
         var scrollTop = $(this).scrollTop();
         if (scrollTop > lastScrollTop) {
             Session.set("imageLimit", Session.get("imageLimit") + 3);
         }
     }
+});
+
+$(window).load(function(event) {
+    if ( $(window).width() <= 975 ) {
+        Session.set("setOneCol", true);
+        Session.set("userSetOneCol", false);
+    }
+});
+
+$(window).resize(function(event) {
+    if ( $(window).width() <= 975 ) {
+        Session.set("setOneCol", true);
+    } else if ( Session.get("userSetOneCol") === false ) {
+        Session.set("setOneCol", false);
+    }
+});
+
+Template.images.onCreated(function() {
+    this.autorun(() => {
+        this.subscribe('images');
+    });
 });
 
 Template.images.helpers({
@@ -43,13 +64,21 @@ Template.images.helpers({
                 }
             );
         } else {
-            return Images.find(
+            const result = Images.find(
                 {},
                 {
                     sort: {createdOn: -1, rating: -1},
                     limit: Session.get("imageLimit")
                 }
             );
+            let imagesList = [];
+
+            result.forEach((image) => {
+                imagesList.push(image._id);
+            });
+            Session.set("imagesList", imagesList);
+            
+            return result;
         }
     },
     getUser: function(user_id) {
@@ -100,6 +129,16 @@ Template.image.helpers({
     },
     galleries: (image_id) => {
         return Galleries.find({ images_id: image_id });
+    },
+    prev_image: (image_id) => {
+        const imagesList = Session.get("imagesList");
+        const index = imagesList.indexOf(image_id);
+        return (index < 1) ? "#" : "/image/" + imagesList[index - 1];
+    },
+    next_image: (image_id) => {
+        const imagesList = Session.get("imagesList");
+        const index = imagesList.indexOf(image_id);
+        return ( index === (imagesList.length - 1) ) ? "#" : "/image/" + imagesList[index + 1];
     }
 });
 
@@ -126,7 +165,7 @@ Template.navbar.helpers({
 Template.search.helpers({
     imagesIndex: () => ImagesIndex,
     inputAttributes: function () {
-		return { 'autofocus': '', 'placeholder': 'Start searching...' };
+		return { 'class': 'search-bar', 'autofocus': '', 'placeholder': 'Start searching...' };
     },
     getUser: function(user_id) {
         var user = Meteor.users.findOne({_id: user_id});
@@ -148,7 +187,7 @@ Template.search.helpers({
 Template.search_tags.helpers({
     tagsIndex: () => TagsIndex,
     inputAttributes: function () {
-		return { 'autofocus': '', 'placeholder': 'Start searching...' };
+		return { 'class': 'search-bar', 'autofocus': '', 'placeholder': 'Start searching...' };
     },
     getImage: function(image_id) {
         let image = Images.findOne({_id: image_id});
@@ -159,7 +198,7 @@ Template.search_tags.helpers({
 Template.search_galleries.helpers({
     galleriesIndex: () => GalleriesIndex,
     inputAttributes: function () {
-		return { 'autofocus': '', 'placeholder': 'Start searching...' };
+		return { 'class': 'search-bar', 'autofocus': '', 'placeholder': 'Start searching...' };
     },
     getUser: function(user_id) {
         let user = Meteor.users.findOne({_id: user_id});
@@ -206,9 +245,11 @@ Template.images.events({
     },
     "click .js-one-col": function(event) {
         Session.set("setOneCol", true);
+        Session.set("userSetOneCol", true);
     },
     "click .js-three-col": function(event) {
         Session.set("setOneCol", false);
+        Session.set("userSetOneCol", false);
     },
     "click .js-set-image-filter": function(event) {
         Session.set("userFilter", this.createdBy);
@@ -232,15 +273,19 @@ Template.image_add_form.events({
     "submit .js-add-image": function(event) {
         event.preventDefault();
         
-        let img_src, img_title, img_alt, img_copy, tags = [], galleries;
+        let img_src, img_title, img_alt, img_copy, tags = [], galleries, aspect_ratio;
         img_src = event.target.img_src.value;
         img_title = event.target.img_title.value;
         img_alt = event.target.img_alt.value;
         img_copy = event.target.img_copy.value;
         tags = event.target.tags.value.split(" ");
         galleries = event.target.galleries.value.split(" ");
+
+        let imgObg = new Image();
+        imgObg.src = img_src;
+        aspect_ratio = (imgObg.width >= imgObg.height) ? "landscape" : "portrait";
         
-        Meteor.call("addImage", {img_src, img_title, img_alt, img_copy, tags, galleries}, function(error, result) {
+        Meteor.call("addImage", {img_src, img_title, img_alt, img_copy, tags, galleries, aspect_ratio}, function(error, result) {
             let image_id = result;
 
             for (let i = 0; i < tags.length; i++) {

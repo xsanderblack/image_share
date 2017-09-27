@@ -34,6 +34,7 @@ Meteor.methods({
             createdBy: Meteor.user()._id,
             tags: data.tags,
             galleries: data.galleries,
+            aspect_ratio: data.aspect_ratio,
             isSelected: false,
         });
     },

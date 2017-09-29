@@ -1,0 +1,497 @@
+/* Variables and classes */
+
+@button-border: solid 1px rgba(160, 160, 160, 0.3);
+@text-color: #777;
+@shadow-color: rgba(22, 22, 22, 0.4);
+
+.btn-default {
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+}
+
+.translate-50-50 {
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+
+.block-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.absolute-full-block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+/* Basic */
+
+body {
+    /* Height of navbar + 10px */
+    padding-top: 60px;
+    /* Height of footer + 20px */
+    margin-bottom: 120px;
+    font-family: 'Raleway', sans-serif;
+}
+
+/* Welcome Page */
+
+video { 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    .translate-50-50;
+    background: url('ShimmeringParticles_MotionArray.png') no-repeat;
+    background-size: cover;
+    transition: 1s opacity;
+}
+
+.jumbotron {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+li#login-dropdown-list.dropdown {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+
+.navbar {
+    background: rgba(244, 246, 255, 0.9);
+    border-bottom: @button-border;
+    ul li {
+        a, button {
+            .btn-default;
+            font-size: 0.8em;
+        }
+        .btn-success {
+            background: rgba(180, 255, 173, 0.9);
+            border: @button-border;
+            color: @text-color;
+            &:hover, &:target, &:focus {
+                background: rgba(150, 255, 140, 0.9);
+                border: @button-border;
+                color: @text-color;
+            }
+        }
+    }
+    h1 {
+        margin: 0;
+        a {
+            .btn-default;
+            font-size: 0.4em;
+        }
+    }
+}
+
+.magnifying-glass {
+    display: block;
+    text-indent: -9999px;
+    width: 18px;
+    height: 18px;
+    background: url(magnifying-glass.svg);
+    background-size: 18px 18px;
+}
+
+/* Switchers line */
+
+.nav-pills {
+    li a {
+        color: @text-color;
+    }
+    li.active {
+        a, a:hover, a:focus {
+            background: rgba(184, 213, 239, 1);
+            border: @button-border;
+            color: #fff;
+        }
+    }
+    li.active a span, li a span {
+        font-size: 1.3em;
+    }
+    li.pull-right a {
+        padding: 9px 10px;
+    }
+}
+
+/* Images, tags, galleries and users grid */
+
+.thumbnail {
+    position: relative;
+    border: none;
+    padding: 0;
+    /* Set height of thumbnail in % from width with padding-top */
+    padding-top: 100%;
+    overflow: hidden;
+    margin-bottom: 30px;
+    &.tag-thumbnail{
+        padding-top: 50%;
+        margin: 20px 0;
+    }
+    &.gal-thumbnail{
+        padding-top: 60%;
+        margin: 20px 0;
+    }
+    &.user-thumbnail{
+        padding-top: 40%;
+        margin: 20px 0;
+    }
+}
+
+.thumbnail {
+    div.shadow {
+        .absolute-full-block;
+        box-shadow: inset 0 100vh @shadow-color;
+        transition: .2s ease;
+    }
+    div.shadow-blue {
+        box-shadow: inset 0 100vh rgba(154, 222, 252, 0.6);
+    }
+    &:hover {
+        div.shadow-top {
+            .absolute-full-block;
+            box-shadow: inset 0 50px @shadow-color;
+            transition: .2s ease;
+        }
+        div.shadow-bottom {
+            .absolute-full-block;
+            box-shadow: inset 0 -50px @shadow-color;
+            transition: .2s ease;
+        }
+    }
+}
+
+.thumbnail .img-link {
+    .absolute-full-block;
+    a {
+        .block-link;
+    }
+}
+
+/* Fit images in thumbnails */
+.thumbnail img {
+    max-width: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    .translate-50-50;
+    &.portrait {
+        width: 100%;
+        height: auto;
+    }
+    &.landscape {
+        width: auto;
+        height: 100%;
+    }
+}
+
+.tag-thumbnail img, .gal-thumbnail img {
+    width: 100%;
+    height: auto;
+}
+
+/* For one column view */
+.one-col-thumbnail {
+    padding-top: 100%;
+    margin-bottom: 100px;
+}
+
+.center-img {
+    margin: 0 auto;
+    float: none;
+}
+
+/* Style overlay for images */
+.top-left {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    color: #fff;
+    opacity: 0;
+    transition: .2s ease;
+}
+
+.top-right {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    color: #fff;
+    opacity: 0;
+    transition: .2s ease;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+    color: #fff;
+    opacity: 0;
+    transition: .2s ease;
+}
+
+.bottom-right {
+    position: absolute;
+    bottom: 0px;
+    right: 16px;
+    color: #fff;
+    opacity: 0;
+    transition: .2s ease;
+}
+
+.center {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    .translate-50-50;
+    color: #fff;
+    transition: .2s ease;
+}
+
+.thumbnail:hover {
+    .top-left, .top-right, .bottom-left, .bottom-right {
+        opacity: 1;
+    }
+}
+
+.thumbnail {
+    div.top-left h3 {
+        font-size: 1em;
+        margin-top: 10px;
+    }
+    div.bottom-right p {
+        font-size: 0.75em;
+    }
+}
+
+.tag-thumbnail div.center h3 {
+    font-size: 2em;
+}
+
+.gal-thumbnail div.center h3 {
+    font-size: 2.5em;
+}
+
+.user-thumbnail div.center h3 {
+    font-size: 1.8em;
+}
+
+.bottom-right a {
+    color: rgb(184, 213, 239);
+    &:hover {
+        color: rgb(141, 193, 238);
+    }
+}
+
+/* Highlight private images */
+.selected-image {
+    box-shadow: 0 0 30px #66b3ff;
+}
+
+/* Single image page */
+
+.single-img-container {
+    position: relative;
+    width: 100%;
+    height: -webkit-calc(~"100vh - 50px");
+    height: -moz-calc(~"100vh - 50px");
+    height: calc(~"100vh - 50px");
+    margin-top: -10px;
+    .nav-previous, .nav-next {
+        position: absolute;
+        top: 50%;
+        width: 5.5em;
+        height: 5.5em;
+        background-image: url(arrow.svg);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+    }
+    /* Align vertically nav buttons and invert .nav-previous */
+    .nav-previous {
+        left: 0;
+        -webkit-transform: scaleX(-1) translateY(-50%);
+        -ms-transform: scaleX(-1) translateY(-50%);
+        transform: scaleX(-1) translateY(-50%);
+    }
+    .nav-next {
+        right: 0;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+    .nav-previous a, .nav-next a {
+        .block-link;
+    }
+}
+
+.single-img-shadow {
+    .absolute-full-block;
+    box-shadow: inset 0 100vh rgba(0, 0, 0, 0.85);
+}
+
+.single-img {
+    position: absolute;
+    height: 100%;
+    left: 50%;
+    top: 50%;
+    .translate-50-50;
+}
+
+.img-description-container {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.img-description > p {
+    font-size: 1.2em;
+    line-height: 1.5em;
+    margin: 1.5em 0;
+}
+
+/* User's page */
+
+.user-top {
+    h1 {
+        margin-left: 3em;
+        margin-bottom: 1.5em;
+    }
+    p {
+        margin-top: 2.5em;
+    }
+}
+
+.user-top-line {
+    margin-bottom: 2em;
+}
+
+button.js-del-image {
+    .btn-default;
+    font-size: 0.8em;
+    background: rgba(253, 48, 48, 0.9);
+    border: @button-border;
+    margin-bottom: 10px;
+    &:hover, &:target, &:focus {
+        background: rgba(238, 19, 19, 0.9);
+        border: @button-border;
+    }
+}
+
+/* Search page */
+
+.search-bar-container {
+    position: relative;
+    margin-top: -10px;
+    margin-bottom: 2em;
+    height: 4em;
+    border-bottom: @button-border;
+}
+
+.search-bar {
+    display: block;
+    position: absolute;
+    /* Control placement of search input on search bar here */
+    width: 60%;
+    top: 0;
+    bottom: 0;
+    margin-left: 20%;
+    border: none;
+    font-size: 1.6em;
+    &:focus {
+        outline: none;
+    }
+    &::placeholder {
+        opacity: 1;
+        color: #CFCDCD;
+    }
+}
+
+.search-text p {
+    font-size: 1.5em;
+}
+
+/* Add image modal */
+
+#image_add_form .modal-dialog {
+    margin-top: -10px;
+    .modal-content {
+        .modal-header {
+            padding-top: 25px;
+            padding-bottom: 10px;
+            font-size: 1.3em;
+        }
+        .modal-body #add-image {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            align-items: flex-start;
+            .upload-description {
+                flex-basis: 30%;
+                text-align: right;
+                margin-top: 3px;
+            }
+            .upload-input {
+                flex-basis: 65%;
+                textarea {
+                    resize: vertical;
+                }
+            }
+        }
+        .modal-footer {
+            .btn-success, .btn-warning {
+                .btn-default;
+                font-size: 0.8em;
+            }
+            .btn-success {
+                background: rgba(131, 245, 118, 0.9);
+                border: @button-border;
+                &:hover, &:target, &:focus {
+                    background: rgba(88, 250, 73, 0.9);
+                    border: @button-border;
+                }
+            }
+            .btn-warning {
+                background: rgba(253, 171, 48, 0.9);
+                border: @button-border;
+                &:hover, &:target, &:focus {
+                    background: rgba(255, 153, 0, 0.9);
+                    border: @button-border;
+                }
+            }
+        }
+    }
+}
+
+/* Sticky Bootstrap footer */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 100px;
+    background: rgba(244, 246, 255, 1);
+    border-top: @button-border;
+    p {
+        height: 60px;
+        margin: 20px 0;
+    }
+}

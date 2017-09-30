@@ -6,14 +6,14 @@ import { Images } from '../api/collections.js';
 
 import './galleries.html';
 
-Meteor.subscribe("galleries");
-Meteor.subscribe("images");
+Meteor.subscribe('galleries');
+Meteor.subscribe('images');
 Meteor.subscribe('userData');
 
-Session.set("gallerieLimit", 12);
-Session.set("imageLimit", 9);
-Session.set("userLimit", 12);
-Session.setDefault("userPhotoNew", true);
+Session.set('gallerieLimit', 12);
+Session.set('imageLimit', 9);
+Session.set('userLimit', 12);
+Session.setDefault('userPhotoNew', true);
 
 Template.galleries.helpers({
     galleries: function() {
@@ -21,13 +21,9 @@ Template.galleries.helpers({
                 { images_id: { $ne: [] } },
                 {
                     sort: { createdOn: -1 },
-                    limit: Session.get( "gallerieLimit" )
+                    limit: Session.get('gallerieLimit')
                 }
             );
-    },
-    getUser: function(user_id) {
-        let user = Meteor.users.findOne({_id: user_id});
-        if (user) return user.username;
     },
     getImage: function(image_id) {
         let image = Images.findOne({_id: image_id});
@@ -37,14 +33,14 @@ Template.galleries.helpers({
 
 Template.gallerie.helpers({
     images: function(images_id) {
-        if ( Session.get("setPopularGalOne") ) {
+        if ( Session.get('setPopularGalOne') ) {
             return Images.find(
                 {
                     _id: { $in: images_id }
                 },
                 {
                     sort: {rating: -1, createdOn: -1},
-                    limit: Session.get("imageLimit")
+                    limit: Session.get('imageLimit')
                 }
             );
         } else {
@@ -54,31 +50,20 @@ Template.gallerie.helpers({
                 },
                 {
                     sort: {createdOn: -1, rating: -1},
-                    limit: Session.get("imageLimit")
+                    limit: Session.get('imageLimit')
                 }
             );
         }
     },
     getUser: function(user_id) {
-        var user = Meteor.users.findOne({_id: user_id});
-        if (user) {
-            return user.username;
-        } else {
-            return "anon";
-        }
+        const user = Meteor.users.findOne({_id: user_id});
+        return (user) ? user.username : 'anon';
     },
     setPopularGalOne: function() {
-        return Session.get("setPopularGalOne") ? true : false;
+        return Session.get('setPopularGalOne') ? true : false;
     },
     setOneCol: function() {
-        return Session.get( "setOneCol" ) ? true : false;
-    },
-    canEdit: function() {
-        if (this.createdBy === Meteor.userId()) {
-            return true;
-        } else {
-            return false;
-        }
+        return Session.get( 'setOneCol' ) ? true : false;
     }
 });
 
@@ -88,7 +73,7 @@ Template.users.helpers({
                 {},
                 {
                     sort: { createdOn: -1 },
-                    limit: Session.get( "userLimit" )
+                    limit: Session.get('userLimit')
                 }
             );
     }
@@ -98,33 +83,33 @@ Template.user_top.helpers({
     photos_count: function(_id) {
         return Images.find({ createdBy: _id }).count();
     },
-    setPhotos: () => ( Router.current().route.getName() === "users.:user_id.photos" ),
-    setGalleries: () => ( Router.current().route.getName() ===  "users.:user_id.galleries" )
+    setPhotos: () => ( Router.current().route.getName() === 'users.:user_id.photos' ),
+    setGalleries: () => ( Router.current().route.getName() ===  'users.:user_id.galleries' )
 });
 
 Template.photos_by_user.helpers({
     images: function(user_id) {
-        if ( Session.get("userPhotoNew") ) {
+        if ( Session.get('userPhotoNew') ) {
             return Images.find(
                 {
                     createdBy: user_id
                 },
                 {
                     sort: {createdOn: -1, rating: -1},
-                    limit: Session.get("imageLimit")
+                    limit: Session.get('imageLimit')
                 }
             );
-        } else if ( Session.get("userPhotoPopular") ) {
+        } else if ( Session.get('userPhotoPopular') ) {
             return Images.find(
                 {
                     createdBy: user_id
                 },
                 {
                     sort: {rating: -1, createdOn: -1},
-                    limit: Session.get("imageLimit")
+                    limit: Session.get('imageLimit')
                 }
             );
-        } else if ( Session.get("userPhotoPrivate") ) {
+        } else if ( Session.get('userPhotoPrivate') ) {
             return Images.find(
                 {
                     createdBy: user_id,
@@ -132,31 +117,27 @@ Template.photos_by_user.helpers({
                 },
                 {
                     sort: {createdOn: -1, rating: -1},
-                    limit: Session.get("imageLimit")
+                    limit: Session.get('imageLimit')
                 }
             );
         }
     },
     userPhotoNew: function() {
-        return Session.get("userPhotoNew") ? true : false;
+        return Session.get('userPhotoNew') ? true : false;
     },
     userPhotoPopular: function() {
-        return Session.get("userPhotoPopular") ? true : false;
+        return Session.get('userPhotoPopular') ? true : false;
     },
     userPhotoPrivate: function() {
-        return Session.get("userPhotoPrivate") ? true : false;
+        return Session.get('userPhotoPrivate') ? true : false;
     },
     setOneCol: function() {
-        return Session.get( "setOneCol" ) ? true : false;
+        return Session.get('setOneCol') ? true : false;
     },
     canEdit: function() {
-        if (this.createdBy === Meteor.userId()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (this.createdBy === Meteor.userId()) ? true : false;
     },
-    canEditUser: ( user_id ) => ( user_id === Meteor.userId() )
+    canEditUser: (user_id) => (user_id === Meteor.userId())
 });
 
 Template.galleries_by_user.helpers({
@@ -168,105 +149,87 @@ Template.galleries_by_user.helpers({
                 },
                 {
                     sort: { createdOn: -1 },
-                    limit: Session.get( "gallerieLimit" )
+                    limit: Session.get('gallerieLimit')
                 }
             );
     },
     getImage: function(image_id) {
-        let image = Images.findOne({_id: image_id});
+        const image = Images.findOne({_id: image_id});
         if (image) return image.img_src;
     },
 });
 
 Template.gallerie.events({
-    "click .js-del-image": function(event) {
-        var image_id = this._id;
-        $("#" + image_id).hide("slow", function() {
-            Meteor.call("removeImage", {image_id: image_id});
-            Meteor.call("removeTag", {image_id});
-            Meteor.call("removeGallerie", {image_id});
-        });
+    'click .js-rate-image': function(event) {
+        const rating = $(event.currentTarget).data('userrating');
+        const image_id = this.id;
+        Meteor.call('rateImage', {image_id: image_id, rating: rating});
     },
-    "click .js-rate-image": function(event) {
-        var rating = $(event.currentTarget).data("userrating");
-        var image_id = this.id;
-        Meteor.call("rateImage", {image_id: image_id, rating: rating});
+    'click .js-set-popular': function(event) {
+        Session.set('setPopularGalOne', true);
+        $('li.js-unset-popular').removeClass('active');
+        $('li.js-set-popular').addClass('active');
     },
-    "click .js-set-popular": function(event) {
-        Session.set("setPopularGalOne", true);
-        $("li.js-unset-popular").removeClass("active");
-        $("li.js-set-popular").addClass("active");
+    'click .js-unset-popular': function(event) {
+        Session.set('setPopularGalOne', false);
+        $('li.js-set-popular').removeClass('active');
+        $('li.js-unset-popular').addClass('active');
     },
-    "click .js-unset-popular": function(event) {
-        Session.set("setPopularGalOne", false);
-        $("li.js-set-popular").removeClass("active");
-        $("li.js-unset-popular").addClass("active");
+    'click .js-one-col': function(event) {
+        Session.set('setOneCol', true);
+        Session.set('userSetOneCol', true);
     },
-    "click .js-one-col": function(event) {
-        Session.set("setOneCol", true);
-        Session.set("userSetOneCol", true);
-    },
-    "click .js-three-col": function(event) {
-        Session.set("setOneCol", false);
-        Session.set("userSetOneCol", false);
-    },
-    "click .js-select-image": function(event) {
-        var image_id = this._id;
-        if (event.target.checked) {
-            $("#" + image_id + " .thumbnail").addClass("selected-image");
-            Meteor.call("selectImage", {image_id: image_id});
-        } else {
-            $("#" + image_id + " .thumbnail").removeClass("selected-image");
-            Meteor.call("unselectImage", {image_id: image_id});
-        }
+    'click .js-three-col': function(event) {
+        Session.set('setOneCol', false);
+        Session.set('userSetOneCol', false);
     }
 });
 
 Template.photos_by_user.events({
-    "click .js-del-image": function(event) {
-        var image_id = this._id;
-        $("#" + image_id).hide("slow", function() {
-            Meteor.call("removeImage", {image_id: image_id});
-            Meteor.call("removeTag", {image_id});
-            Meteor.call("removeGallerie", {image_id});
+    'click .js-del-image': function(event) {
+        const image_id = this._id;
+        $('#' + image_id).hide('slow', function() {
+            Meteor.call('removeImage', {image_id: image_id});
+            Meteor.call('removeTag', {image_id});
+            Meteor.call('removeGallerie', {image_id});
         });
     },
-    "click .js-rate-image": function(event) {
-        var rating = $(event.currentTarget).data("userrating");
-        var image_id = this.id;
-        Meteor.call("rateImage", {image_id: image_id, rating: rating});
+    'click .js-rate-image': function(event) {
+        const rating = $(event.currentTarget).data('userrating');
+        const image_id = this.id;
+        Meteor.call('rateImage', {image_id: image_id, rating: rating});
     },
-    "click .js-set-new": function(event) {
-        Session.set("userPhotoNew", true);
-        Session.set("userPhotoPopular", false);
-        Session.set("userPhotoPrivate", false);
+    'click .js-set-new': function(event) {
+        Session.set('userPhotoNew', true);
+        Session.set('userPhotoPopular', false);
+        Session.set('userPhotoPrivate', false);
     },
-    "click .js-set-popular": function(event) {
-        Session.set("userPhotoNew", false);
-        Session.set("userPhotoPopular", true);
-        Session.set("userPhotoPrivate", false);
+    'click .js-set-popular': function(event) {
+        Session.set('userPhotoNew', false);
+        Session.set('userPhotoPopular', true);
+        Session.set('userPhotoPrivate', false);
     },
-    "click .js-set-private": function(event) {
-        Session.set("userPhotoNew", false);
-        Session.set("userPhotoPopular", false);
-        Session.set("userPhotoPrivate", true);
+    'click .js-set-private': function(event) {
+        Session.set('userPhotoNew', false);
+        Session.set('userPhotoPopular', false);
+        Session.set('userPhotoPrivate', true);
     },
-    "click .js-one-col": function(event) {
-        Session.set("setOneCol", true);
-        Session.set("userSetOneCol", true);
+    'click .js-one-col': function(event) {
+        Session.set('setOneCol', true);
+        Session.set('userSetOneCol', true);
     },
-    "click .js-three-col": function(event) {
-        Session.set("setOneCol", false);
-        Session.set("userSetOneCol", false);
+    'click .js-three-col': function(event) {
+        Session.set('setOneCol', false);
+        Session.set('userSetOneCol', false);
     },
-    "click .js-select-image": function(event) {
-        var image_id = this._id;
+    'click .js-select-image': function(event) {
+        const image_id = this._id;
         if (event.target.checked) {
-            $("#" + image_id + " .thumbnail").addClass("selected-image");
-            Meteor.call("selectImage", {image_id: image_id});
+            $('#' + image_id + ' .thumbnail').addClass('selected-image');
+            Meteor.call('selectImage', {image_id: image_id});
         } else {
-            $("#" + image_id + " .thumbnail").removeClass("selected-image");
-            Meteor.call("unselectImage", {image_id: image_id});
+            $('#' + image_id + ' .thumbnail').removeClass('selected-image');
+            Meteor.call('unselectImage', {image_id: image_id});
         }
     }
 });

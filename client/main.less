@@ -35,6 +35,12 @@
 body {
     /* Height of navbar + 10px */
     padding-top: 60px;
+    @media (max-width: 991px) {
+        padding-top: 110px;
+    }
+    @media (max-width: 768px) {
+        padding-top: 338px;
+    }
     /* Height of footer + 20px */
     margin-bottom: 120px;
     font-family: 'Raleway', sans-serif;
@@ -59,6 +65,21 @@ video {
 
 .jumbotron {
     background: rgba(255, 255, 255, 0.3);
+    & > * {
+        margin: 0 auto;
+    }
+    h1 {
+        width: 200px;
+        text-align: center;
+    }
+    .welcome-login {
+        padding-top: 30px;
+        width: 156px;
+    }
+    .welcome-explore {
+        padding-top: 15px;
+        width: 96px;
+    }
 }
 
 li#login-dropdown-list.dropdown {
@@ -109,6 +130,8 @@ li#login-dropdown-list.dropdown {
 /* Switchers line */
 
 .nav-pills {
+    margin-top: 2em;
+    margin-bottom: 2em;
     li a {
         color: @text-color;
     }
@@ -372,10 +395,6 @@ li#login-dropdown-list.dropdown {
     p {
         margin-top: 2.5em;
     }
-}
-
-.user-top-line {
-    margin-bottom: 2em;
 }
 
 button.js-del-image {

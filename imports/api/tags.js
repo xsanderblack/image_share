@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Index, MinimongoEngine } from 'meteor/easy:search';
 
-export const Tags = new Mongo.Collection("tags");
+export const Tags = new Mongo.Collection('tags');
 
 // Index for tags search
 export const TagsIndex = new Index({
@@ -12,9 +12,9 @@ export const TagsIndex = new Index({
 });
 
 if (Meteor.isServer) {
-  Meteor.publish("tags", function() {
-    return Tags.find();
-  });
+    Meteor.publish('tags', function() {
+        return Tags.find();
+    });
 }
 
 Meteor.methods({
@@ -46,10 +46,6 @@ Meteor.methods({
 
 Tags.allow({
     insert: function(userId, doc) {
-        if (Meteor.user() && doc.createdBy === userId) {
-            return true;
-        } else {
-            return false;
-        }
+        return (Meteor.user() && doc.createdBy === userId) ? true : false;
     },
 });

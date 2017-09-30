@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Index, MinimongoEngine } from 'meteor/easy:search';
 
-export const Images = new Mongo.Collection("images");
+export const Images = new Mongo.Collection('images');
 
 // Index for images search
 export const ImagesIndex = new Index({
@@ -11,13 +11,14 @@ export const ImagesIndex = new Index({
     engine: new MinimongoEngine(),
 });
 
+// Publishing images. Restricting private images to owners.
 if (Meteor.isServer) {
-  Meteor.publish("images", function() {
+  Meteor.publish('images', function() {
     return Images.find({
-      $or: [
-        {isSelected: false},
-        {createdBy: this.userId}
-      ]
+        $or: [
+            {isSelected: false},
+            {createdBy: this.userId}
+        ]
     });
   });
 }
@@ -39,9 +40,11 @@ Meteor.methods({
         });
     },
     removeImage: function(data) {
-        Images.remove({"_id": data.image_id});
+        if (!Meteor.user()) {return;}
+        Images.remove({_id: data.image_id});
     },
     rateImage: function(data) {
+        if (!Meteor.user()) {return;}
         Images.update({_id: data.image_id}, {$set: {rating: data.rating}});
     },
     selectImage: function(data) {
@@ -56,24 +59,12 @@ Meteor.methods({
 
 Images.allow({
     insert: function(userId, doc) {
-        if (Meteor.user() && doc.createdBy === userId) {
-            return true;
-        } else {
-            return false;
-        }
+        return (Meteor.user() && doc.createdBy === userId) ? true : false;
     },
     remove: function(userId, doc) {
-        if (Meteor.user() && doc.createdBy === userId) {
-            return true;
-        } else {
-            return false;
-        }
+        return (Meteor.user() && doc.createdBy === userId) ? true : false;
     },
     update: function(userId, doc) {
-        if (Meteor.user() && doc.createdBy === userId) {
-            return true;
-        } else {
-            return false;
-        }
+        return (Meteor.user() && doc.createdBy === userId) ? true : false;
     }
 });

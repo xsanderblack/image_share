@@ -8,7 +8,7 @@
             <img class="js-image" src="{{getImage images_id.[0]}}" alt="{{gallerie_name}}">
             <div class="shadow"></div>
             <div class="center">
-                <h3>{{gallerie_name}}<!-- by <a href="/users/{{createdBy}}">{{getUser createdBy}}</a>--></h3>
+                <h3>{{gallerie_name}}</h3>
             </div>
             <div class="img-link"><a href="/users/{{createdBy}}/galleries/{{gallerie_name}}"></a></div>
         </div>
@@ -103,7 +103,7 @@
 
     <div class="row">
         <div class="col-xs-12 col-md-12">
-        <ul style="margin-bottom: 30px" class="nav nav-pills">
+        <ul class="nav nav-pills">
             <li role="presentation" class="{{#if userPhotoNew}}active {{/if}}js-set-new"><a href="#">Newest</a></li>
             <li role="presentation" class="{{#if userPhotoPopular}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
             {{#if canEditUser _id}}

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Index, MinimongoEngine } from 'meteor/easy:search';
 
-export const Galleries = new Mongo.Collection("galleries");
+export const Galleries = new Mongo.Collection('galleries');
 
 // Index for galleries search
 export const GalleriesIndex = new Index({
@@ -12,9 +12,9 @@ export const GalleriesIndex = new Index({
 });
 
 if (Meteor.isServer) {
-  Meteor.publish("galleries", function() {
-    return Galleries.find();
-  });
+    Meteor.publish('galleries', function() {
+        return Galleries.find();
+    });
 }
 
 Meteor.methods({
@@ -53,17 +53,9 @@ Meteor.methods({
 
 Galleries.allow({
     insert: function(userId, doc) {
-        if (Meteor.user() && doc.createdBy === userId) {
-            return true;
-        } else {
-            return false;
-        }
+        return (Meteor.user() && doc.createdBy === userId) ? true : false;
     },
     update: function(userId, doc) {
-        if (Meteor.user() && doc.createdBy === userId) {
-            return true;
-        } else {
-            return false;
-        }
+        return (Meteor.user() && doc.createdBy === userId) ? true : false;
     }
 });

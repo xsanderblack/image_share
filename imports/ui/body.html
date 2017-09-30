@@ -8,47 +8,48 @@
     {{> yield "footer"}}
 </template>
 
+<!-- Starting page -->
 <template name="welcome">
     <video id="bgvid" playsinline autoplay muted loop>
         <source src="ShimmeringParticles_MotionArray.mp4" type="video/mp4">
     </video>
     <div class="container">
         <div class="jumbotron">
-            <h1 style="margin: 0 auto; width: 200px; text-align: center;">Hello!</h1>
-            <div style="margin: 0 auto; padding-top: 30px; width: 156px;"><button class="btn btn-success btn-lg">{{> loginButtons}}</button></div>
-            <div style="margin: 0 auto; padding-top: 15px; width: 96px;"><a href="/explore" class="btn btn-info btn-lg">Explore</a></div>
+            <h1>Hello!</h1>
+            <div class="welcome-login"><button class="btn btn-success btn-lg">{{> loginButtons}}</button></div>
+            <div class="welcome-explore"><a href="/explore" class="btn btn-info btn-lg">Explore</a></div>
         </div>
     </div>
 </template>
 
-<template name="image">
-    <div class="single-img-container">
-        <div class="single-img-shadow"></div>
-        <img class="single-img" src="{{img_src}}">
-        <div class="nav-previous"><a href="{{prev_image _id}}"></a></div>
-        <div class="nav-next"><a href="{{next_image _id}}"></a></div>
-    </div>
-
-    <div class="container img-description-container">
-        <div class="row">
-            <div class="col-xs-12 col-md-2">
-                <h3><a href="/users/{{createdBy}}/photos">{{getUser createdBy}}</a></h3>
-            </div>
-            <div class="col-xs-12 col-md-8 img-description">
-                <h1>{{img_title}}</h1>
-                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
-                <p>{{img_alt}}</p>
-                <p>Created by: {{img_copy}}</p>
-            </div>
-            <div class="col-xs-12 col-md-2">
-                <h3>Tags</h3>
-                <p>{{#each tags _id}}
-                    <a href="/tags/{{_id}}">{{tag_name}}</a><br>
-                {{/each}}</p>
-                <h3>Galleries</h3>
-                <p>{{#each galleries _id}}
-                    <a href="/users/{{createdBy}}/galleries/{{gallerie_name}}">{{gallerie_name}}</a><br>
-                {{/each}}</p>
+<!-- Add image modal -->
+<template name="image_add_form">
+    <div class="modal fade" id="image_add_form">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title"><p>Upload image</p></div>
+                </div>
+                <div class="modal-body">
+                    <form class="js-add-image" id="add-image">
+                        <p class="upload-description">Image link:</p>
+                        <p class="upload-input"><input type="text" name="img_src" size="35" required></p>
+                        <p class="upload-description">Name:</p>
+                        <p class="upload-input"><input type="text" name="img_title" size="35" required></p>
+                        <p class="upload-description">Description:</p>
+                        <p class="upload-input"><textarea name="img_alt" rows="10" cols="35" required></textarea></p>
+                        <p class="upload-description">Author:</p>
+                        <p class="upload-input"><input type="text" name="img_copy" size="35" required></p>
+                        <p class="upload-description">Tags:</p>
+                        <p class="upload-input"><input type="text" name="tags" size="35"></p>
+                        <p class="upload-description">Galleries:</p>
+                        <p class="upload-input"><input type="text" name="galleries" size="35"></p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" form="add-image">upload</button>
+                    <button class="btn btn-warning" data-dismiss="modal">cansel</button>
+                </div>
             </div>
         </div>
     </div>
@@ -194,7 +195,7 @@
                             <img class="js-image" src="{{getImage images_id.[0]}}" alt="{{gallerie_name}}">
                             <div class="shadow"></div>
                             <div class="center">
-                                <h3>{{gallerie_name}}<!-- by <a href="/users/{{createdBy}}">{{getUser createdBy}}</a>--></h3>
+                                <h3>{{gallerie_name}}</h3>
                             </div>
                             <div class="img-link"><a href="/users/{{createdBy}}/galleries/{{gallerie_name}}"></a></div>
                         </div>
@@ -205,48 +206,11 @@
     {{/EasySearch.IfInputEmpty}}
 </template>
 
-<template name="image_add_form">
-    <div class="modal fade" id="image_add_form">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title"><p>Upload image</p></div>
-                </div>
-                <div class="modal-body">
-                    <form class="js-add-image" id="add-image">
-                        <p class="upload-description">Image link:</p>
-                        <p class="upload-input"><input type="text" name="img_src" size="35" required></p>
-                        <p class="upload-description">Name:</p>
-                        <p class="upload-input"><input type="text" name="img_title" size="35" required></p>
-                        <p class="upload-description">Description:</p>
-                        <p class="upload-input"><textarea name="img_alt" rows="10" cols="35" required></textarea></p>
-                        <p class="upload-description">Author:</p>
-                        <p class="upload-input"><input type="text" name="img_copy" size="35" required></p>
-                        <p class="upload-description">Tags:</p>
-                        <p class="upload-input"><input type="text" name="tags" size="35"></p>
-                        <p class="upload-description">Galleries:</p>
-                        <p class="upload-input"><input type="text" name="galleries" size="35"></p>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" form="add-image">upload</button>
-                    <button class="btn btn-warning" data-dismiss="modal">cansel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</template>
-
+<!-- Images grid -->
 <template name="images">
     <div class="container">
-    
-    <h2>
-        {{#if filtering_images}}
-        Showing images by {{getFilterUser}}. <a class="js-unset-image-filter" href="#">Show all images</a>
-        {{/if}}
-    </h2>
 
-    <ul style="margin-bottom: 30px" class="nav nav-pills">
+    <ul class="nav nav-pills">
         <li role="presentation" class="{{#unless setPopular}}active {{/unless}}js-unset-popular"><a href="#">Newest</a></li>
         <li role="presentation" class="{{#if setPopular}}active {{/if}}js-set-popular"><a href="#">Popular</a></li>
         <li role="presentation" class="{{#if setOneCol}}active {{/if}}pull-right js-one-col"><a href="#"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a></li>
@@ -264,30 +228,52 @@
             <div class="top-left">
                 <h3>{{img_title}}</h3>
             </div>
-            <!-- <div class="top-right">
-                {{#if canEdit}}
-                <p class="checkbox">
-                    <label>
-                        <input type="checkbox" class="js-select-image"> Select
-                    </label>
-                </p>
-                {{/if}}
-            </div> -->
             <div class="bottom-left">
                 <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
             </div>
             <div class="bottom-right">
-                <p>Uploaded by: <a href="#" class="js-set-image-filter">{{getUser createdBy}}</a><br>
+                <p>Uploaded by: <a href="/users/{{createdBy}}/photos">{{getUser createdBy}}</a><br>
                 Created by: {{img_copy}}</p>
-                <!-- {{#if canEdit}}
-                <button class="js-del-image btn btn-danger">delete</button>
-                {{/if}} -->
             </div>
         </div>
     </div>
     {{/each}}
     </div>
 
+    </div>
+</template>
+
+<!-- Single page image -->
+<template name="image">
+    <div class="single-img-container">
+        <div class="single-img-shadow"></div>
+        <img class="single-img" src="{{img_src}}">
+        <div class="nav-previous"><a href="{{prev_image _id}}"></a></div>
+        <div class="nav-next"><a href="{{next_image _id}}"></a></div>
+    </div>
+
+    <div class="container img-description-container">
+        <div class="row">
+            <div class="col-xs-12 col-md-2">
+                <h3><a href="/users/{{createdBy}}/photos">{{getUser createdBy}}</a></h3>
+            </div>
+            <div class="col-xs-12 col-md-8 img-description">
+                <h1>{{img_title}}</h1>
+                <p>{{>starsRating rating=rating mutable=true class="js-rate-image" id=_id}}</p>
+                <p>{{img_alt}}</p>
+                <p>Created by: {{img_copy}}</p>
+            </div>
+            <div class="col-xs-12 col-md-2">
+                <h3>Tags</h3>
+                <p>{{#each tags _id}}
+                    <a href="/tags/{{_id}}">{{tag_name}}</a><br>
+                {{/each}}</p>
+                <h3>Galleries</h3>
+                <p>{{#each galleries _id}}
+                    <a href="/users/{{createdBy}}/galleries/{{gallerie_name}}">{{gallerie_name}}</a><br>
+                {{/each}}</p>
+            </div>
+        </div>
     </div>
 </template>
 

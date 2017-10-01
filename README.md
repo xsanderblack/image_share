@@ -1,6 +1,6 @@
 # Image Share
 
-Meteor project for image share app. Users can upload images and view images? uploaded by others. 
+Meteor project for image share app. Users can upload images and view images, uploaded by others. 
 Currently it allows to share images in form of link to existing web image. This will change in future and more options will be available. 
 App supports tags, galleries, private images and search.
 

@@ -1,18 +1,16 @@
 # Image Share
 
-Meteor project for image share app. Currently it allows to share images in form of link to existing web image. 
-This will change in future and more options will be available. App supports tags, galleries and search. 
-Also there are user registration and setting to make image private.
+Meteor project for image share app. Users can upload images and view images? uploaded by others. 
+Currently it allows to share images in form of link to existing web image. This will change in future and more options will be available. 
+App supports tags, galleries, private images and search.
 
 ## Installation
 
-Clone or download and unpack repository. Open console in app folder and execute:
+You need Meteor to be installed on your system. Clone or download and unpack repository. Open console in app folder and execute:
 
 ```bash
 meteor install
 ```
-
-You need Meteor to be installed on your system.
 
 After Meteor downloads and installs core packages and extensions, you can run the app:
 

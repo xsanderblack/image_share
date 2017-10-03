@@ -161,17 +161,23 @@ Template.image_add_form.events({
     'submit .js-add-image': function(event) {
         event.preventDefault();
         
-        let img_src, img_title, img_alt, img_copy, tags = [], galleries, aspect_ratio;
+        let img_src, img_title, img_alt, img_copy, tags = [], galleries = [], aspect_ratio;
         img_src = event.target.img_src.value;
         img_title = event.target.img_title.value;
         img_alt = event.target.img_alt.value;
         img_copy = event.target.img_copy.value;
-        tags = event.target.tags.value.split(' ');
-        galleries = event.target.galleries.value.split(' ');
+        if (event.target.tags.value !== '') {
+            tags = event.target.tags.value.split(' ');
+        }
+        if (event.target.galleries.value !== '') {
+            galleries = event.target.galleries.value.split(' ');
+        }
 
         let imgObg = new Image();
+        imgObg.onload = function() {
+            aspect_ratio = (imgObg.width >= imgObg.height) ? 'landscape' : 'portrait';
+        };
         imgObg.src = img_src;
-        aspect_ratio = (imgObg.width >= imgObg.height) ? 'landscape' : 'portrait';
         
         Meteor.call('addImage', {img_src, img_title, img_alt, img_copy, tags, galleries, aspect_ratio}, function(error, result) {
             let image_id = result;
